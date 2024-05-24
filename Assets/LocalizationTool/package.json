@@ -1,9 +1,12 @@
 {
   "name": "com.17media.localizationtool",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "displayName": "LocalizationTool",
   "description": "Auto generate localization.txt",
   "unity": "2021.3",
+  "dependencies": {
+			
+	},
   "keywords": [
     "Localization"
   ],
