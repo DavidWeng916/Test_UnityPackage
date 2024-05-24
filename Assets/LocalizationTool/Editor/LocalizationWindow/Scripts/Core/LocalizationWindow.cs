@@ -1,5 +1,6 @@
 // https://github.com/GlitchEnzo/NuGetForUnity
 // https://forum.unity.com/threads/possibilities-to-load-uss-uxml-when-distributed-as-package.905618/
+// https://warl.top/posts/Unity-Package/
 
 using UnityEditor;
 using UnityEditor.UIElements;

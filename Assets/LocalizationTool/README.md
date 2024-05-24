@@ -1,0 +1,1 @@
+Automate generate localization tool
