@@ -1,0 +1,17 @@
+{
+  "name": "com.17media.localizationtool",
+  "version": "0.1.0",
+  "displayName": "LocalizationTool",
+  "description": "Auto generate localization.txt",
+  "unity": "2021.3",
+  "keywords": [
+    "Localization"
+  ],
+  "author": {
+    "name": "David Weng",
+    "email": "davidweng@17.media",
+    "url": "https://github.com/DavidWeng916/Test_UnityPackage"
+  },
+  "hideInEditor": false,
+  "type": "library"
+}

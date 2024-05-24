@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Editor/LocalizationWindow/UI%20Toolkit/StyleSheet/LocalizationWindow.uss?fileID=7433441132597879392&amp;guid=3e1df3e75c2b74db796048ed0225cdd2&amp;type=3#LocalizationWindow" />
+    <ui:TextField picking-mode="Ignore" label="CSV Path" value="filler text" text="filler text" name="CsvPath" />
+    <ui:TextField picking-mode="Ignore" label="Output Path" value="filler text" text="filler text" name="OutputPath" />
+    <ui:Toggle label="FormatJson" name="JsonFormatToggle" text="Does json need to be formatted?" focusable="true" value="true" />
+    <ui:Toggle label="GenerateReport" name="GenerateReportToggle" text="Do it need to generate an output report?" focusable="true" value="true" />
+    <ui:Button text="Execute" display-tooltip-when-elided="true" name="ExecuteButton" class="MenuButton" style="color: rgb(0, 255, 0);" />
+    <ui:Button text="Test" display-tooltip-when-elided="true" name="TestButton" class="MenuButton" style="white-space: nowrap; -unity-text-align: middle-center;" />
+</ui:UXML>
