@@ -9,14 +9,14 @@ namespace Live17.LocalizationEditor
     {
         public static void Execute(ConfigData _configData, EditorWindow editorWindow)
         {
-            if (!ConfigUtil.CheckConfigData(editorWindow, _configData))
+            if (!FileUtil.CheckConfigData(editorWindow, _configData))
             {
                 return;
             }
 
             Dictionary<string, List<TranslatePairData>> translateMap = CSVParser.Execute(_configData);
 
-            JsonOutput.Execute(translateMap, _configData.OutputPath, _configData.IsFormatJson);
+            JsonOutput.Execute(translateMap, _configData.LocalizationPath, _configData.IsFormatJson);
 
             if (_configData.IsGenerateReport)
             {

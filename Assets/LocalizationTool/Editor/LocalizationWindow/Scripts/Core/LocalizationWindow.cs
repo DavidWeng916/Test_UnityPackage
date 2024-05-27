@@ -26,12 +26,10 @@ namespace Live17.LocalizationEditor
 
             VisualElement rootElement = rootVisualElement;
 
-            // return;
             // Import UXML
             // var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/LocalizationTool/Editor/UI Toolkit/VisualTree/LocalizationWindow.uxml");
             VisualTreeAsset visualTree = Resources.Load<VisualTreeAsset>("UI Toolkit/VisualTree/LocalizationWindow");
             VisualElement labelFromUXML = visualTree.Instantiate();
-            // Debug.Log($"===== labelFromUXML:{labelFromUXML}");
             rootElement.Add(labelFromUXML);
 
             // Import Style
@@ -46,12 +44,17 @@ namespace Live17.LocalizationEditor
                 _configData.Save();
             });
 
-            // TextField - Output Path
-            TextField outputPathTextField = rootElement.Query<TextField>("OutputPath");
-            outputPathTextField.value = _configData.OutputPath;
-            outputPathTextField.RegisterValueChangedCallback((ChangeEvent<string> evt) =>
+            // ObjectField - Output Path
+            ObjectField localizationPathOF = rootVisualElement.Query<ObjectField>("LocalizationPath");
+            localizationPathOF.value = FileUtil.GetTextAsset(_configData.LocalizationPath);
+            localizationPathOF.RegisterValueChangedCallback((ChangeEvent<Object> evt) =>
             {
-                _configData.OutputPath = evt.newValue;
+                if (evt.newValue == null)
+                {
+                    return;
+                }
+
+                _configData.LocalizationPath = AssetDatabase.GetAssetPath(evt.newValue);
                 _configData.Save();
             });
 
@@ -78,8 +81,8 @@ namespace Live17.LocalizationEditor
             parseButton.clicked += OnProcess;
 
             // Button - Execute
-            Button testButton = rootElement.Query<Button>("TestButton");
-            testButton.clicked += OnTest;
+            /* Button testButton = rootElement.Query<Button>("TestButton");
+            testButton.clicked += OnTest; */
         }
 
         private void OnProcess()
@@ -87,15 +90,9 @@ namespace Live17.LocalizationEditor
             LocalizationProcess.Execute(_configData, this);
         }
 
-        private void OnTest()
+        /* private void OnTest()
         {
-            // ConfigUtil.DeleteAll();
-
-            VisualTreeAsset visualTree = Resources.Load<VisualTreeAsset>("UI Toolkit/VisualTree/LocalizationWindow");
-            Debug.Log($"===== visualTree:{visualTree}");
-
-            // var aaa = Resources.Load<TextAsset>("json");
-            // Debug.Log($"===== aaa:{aaa}");
-        }
+            ConfigUtil.DeleteAll();
+        } */
     }
 }
