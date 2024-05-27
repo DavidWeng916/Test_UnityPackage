@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -35,8 +34,11 @@ namespace Live17.LocalizationEditor
     {
         public string CsvPath = $"./csv/localization_{ConfigUtil.PROJECT_NAME}.csv";
         public string LocalizationPath = $"Assets/Resources/Localization/localization_{ConfigUtil.PROJECT_NAME}.txt";
+        public bool IsOnlyUnityTagToggle = true;
         public bool IsFormatJson = true;
         public bool IsGenerateReport = false;
+        public bool IsRemovePrefixWord = false;
+        public string PrefixWord = string.Empty;
 
         public void Save()
         {

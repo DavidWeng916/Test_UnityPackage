@@ -11,6 +11,8 @@ namespace Live17.LocalizationEditor
 {
     public static class CSVParser
     {
+        private const string UNITY_TAG = "Unity";
+
         private static readonly CsvConfiguration CSV_CONFIG = new CsvConfiguration(CultureInfo.InvariantCulture)
         {
             //PrepareHeaderForMatch = args => args.Header.ToLower(),
@@ -24,40 +26,45 @@ namespace Live17.LocalizationEditor
             "ja_jp",
         };
 
-        public static Dictionary<string, List<TranslatePairData>> Execute(ConfigData _configData)
+        public static Dictionary<string, List<TranslatePairData>> Execute(ConfigData configData)
         {
             Dictionary<string, List<TranslatePairData>> translateMap = null;
 
             // using (TextReader reader = new StringReader(sourcePath))
-            using (var reader = new StreamReader(_configData.CsvPath))
+            using (var reader = new StreamReader(configData.CsvPath))
             using (var csv = new CsvReader(reader, CSV_CONFIG))
             {
                 bool isRead = csv.Read();
-
-                List<string> ids = GetIds(csv);
-                translateMap = GetTranslateMap(csv, ids);
+                List<string> tags = GetTags(csv);
+                List<string> ids = GetIds(csv, configData);
+                translateMap = GetTranslateMap(csv, tags, ids, configData);
             }
 
             return translateMap;
         }
 
-        private static List<string> GetIds(CsvReader csv)
+        private static List<string> GetTags(CsvReader csv)
         {
-            bool isRead = csv.Read();
+            List<string> tags = new List<string>();
 
-            //Debug.Log($"===== csv.ColumnCount:{csv.ColumnCount}");
-
-            /*if (csv.ReadHeader())
+            if (csv.ReadHeader())
             {
                 string[] headers = csv.HeaderRecord;
-                Debug.Log($"===== headers.Length:{headers.Length}");
-                for (int i = 1; i < headers.Length; i++)
+                // Debug.Log($"headers.Length:{headers.Length}");
+                for (int colIndex = 0; colIndex < headers.Length; colIndex++)
                 {
-                    string header = headers[i];
-                    Debug.Log($"headers[{i}]:{header}");
-                    ids.Add(header);
+                    string header = headers[colIndex];
+                    // Debug.Log($"headers[{colIndex}]:{header}");
+                    tags.Add(header);
                 }
-            }*/
+            }
+
+            return tags;
+        }
+
+        private static List<string> GetIds(CsvReader csv, ConfigData _configData)
+        {
+            bool isRead = csv.Read();
 
             List<string> ids = new List<string>();
 
@@ -66,7 +73,12 @@ namespace Live17.LocalizationEditor
             {
                 if (csv.TryGetField(colIndex, out string data))
                 {
-                    //Debug.Log($"[{colIndex}][{data}]");
+                    // Debug.Log($"[{colIndex}][{data}]");
+                    if (_configData.IsRemovePrefixWord)
+                    {
+                        data = StringUtil.RemovePrefix(data, $"{_configData.PrefixWord}.");
+                    }
+
                     ids.Add(data);
                 }
             }
@@ -74,13 +86,14 @@ namespace Live17.LocalizationEditor
             return ids;
         }
 
-        private static Dictionary<string, List<TranslatePairData>> GetTranslateMap(CsvReader csv, List<string> ids)
+        private static Dictionary<string, List<TranslatePairData>> GetTranslateMap(CsvReader csv, List<string> tags, List<string> ids, ConfigData configData)
         {
+            // Debug.Log($"tags.Count:{tags.Count}");
+            // Debug.Log($"ids.Count:{ids.Count}");
+
             bool isRead = csv.Read();
-
-            int idCount = ids.Count;
-            Debug.Log($"===== idCount:{idCount}");
-
+            int count = Mathf.Min(tags.Count, ids.Count);
+            // Debug.Log($"count:{count}");
             var langMap = new Dictionary<string, List<TranslatePairData>>();
 
             // en_us, zh_tw, ja_jp
@@ -90,20 +103,24 @@ namespace Live17.LocalizationEditor
 
                 if (LANGUAGE_HASHSET.Contains(langId))
                 {
-                    Debug.Log($"===== langId:{langId} ColumnCount:{csv.ColumnCount}");
-
                     if (!langMap.TryGetValue(langId, out List<TranslatePairData> translateList))
                     {
                         translateList = new List<TranslatePairData>();
                         langMap.Add(langId, translateList);
                     }
 
-                    for (int colIndex = 1; colIndex < idCount; colIndex++)
+                    for (int colIndex = 1; colIndex < count; colIndex++)
                     {
                         if (csv.TryGetField(colIndex, out string value))
                         {
+                            string tag = tags[colIndex];
                             string id = ids[colIndex];
-                            //Debug.Log($"[{colIndex}] id:{id} value:{value}");
+                            // Debug.Log($"[{colIndex}] tag:{tag} id:{id} value:{value}");
+
+                            if (configData.IsOnlyUnityTagToggle && !tag.Equals(UNITY_TAG))
+                            {
+                                continue;
+                            }
 
                             if (translateList.Exists(data => data.Key == id))
                             {

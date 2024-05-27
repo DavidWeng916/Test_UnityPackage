@@ -36,15 +36,15 @@ namespace Live17.LocalizationEditor
             // var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Editor/LocalizationWindow/UI Toolkit/StyleSheet/LocalizationWindow.uss");
 
             // TextField - CSV Path
-            TextField csvPathTextField = rootElement.Query<TextField>("CsvPath");
-            csvPathTextField.value = _configData.CsvPath;
-            csvPathTextField.RegisterValueChangedCallback((ChangeEvent<string> evt) =>
+            TextField csvPathTF = rootElement.Query<TextField>("CsvPath");
+            csvPathTF.value = _configData.CsvPath;
+            csvPathTF.RegisterValueChangedCallback((ChangeEvent<string> evt) =>
             {
                 _configData.CsvPath = evt.newValue;
                 _configData.Save();
             });
 
-            // ObjectField - Output Path
+            // ObjectField - Localizatio Path
             ObjectField localizationPathOF = rootVisualElement.Query<ObjectField>("LocalizationPath");
             localizationPathOF.value = FileUtil.GetTextAsset(_configData.LocalizationPath);
             localizationPathOF.RegisterValueChangedCallback((ChangeEvent<Object> evt) =>
@@ -55,6 +55,15 @@ namespace Live17.LocalizationEditor
                 }
 
                 _configData.LocalizationPath = AssetDatabase.GetAssetPath(evt.newValue);
+                _configData.Save();
+            });
+
+            // Toggle - Only Unity Tag
+            Toggle onlyUnityTagToggle = rootElement.Query<Toggle>("OnlyUnityTagToggle");
+            onlyUnityTagToggle.value = _configData.IsOnlyUnityTagToggle;
+            onlyUnityTagToggle.RegisterValueChangedCallback((ChangeEvent<bool> evt) =>
+            {
+                _configData.IsOnlyUnityTagToggle = evt.newValue;
                 _configData.Save();
             });
 
@@ -76,13 +85,39 @@ namespace Live17.LocalizationEditor
                 _configData.Save();
             });
 
+            // TextField - Prefix
+            TextField prefixInputTF = rootElement.Query<TextField>("PrefixInput");
+            prefixInputTF.style.display = CheckIsDisplay(_configData.IsRemovePrefixWord);
+            prefixInputTF.value = _configData.PrefixWord;
+            prefixInputTF.RegisterValueChangedCallback((ChangeEvent<string> evt) =>
+            {
+                _configData.PrefixWord = evt.newValue;
+                _configData.Save();
+            });
+
+            // Toggle - Prefix
+            Toggle prefixToggleToggle = rootElement.Query<Toggle>("PrefixToggle");
+            prefixToggleToggle.value = _configData.IsRemovePrefixWord;
+            prefixToggleToggle.RegisterValueChangedCallback((ChangeEvent<bool> evt) =>
+            {
+                _configData.IsRemovePrefixWord = evt.newValue;
+                _configData.Save();
+
+                prefixInputTF.style.display = CheckIsDisplay(_configData.IsRemovePrefixWord);
+            });
+
             // Button - Execute
             Button parseButton = rootElement.Query<Button>("ExecuteButton");
             parseButton.clicked += OnProcess;
 
-            // Button - Execute
-            Button testButton = rootElement.Query<Button>("TestButton");
-            testButton.clicked += OnTest;
+            // Button - Test
+            /* Button testButton = rootElement.Query<Button>("TestButton");
+            testButton.clicked += OnTest; */
+        }
+
+        private static DisplayStyle CheckIsDisplay(bool isDisplay)
+        {
+            return isDisplay ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
         private void OnProcess()
@@ -90,9 +125,9 @@ namespace Live17.LocalizationEditor
             LocalizationProcess.Execute(_configData, this);
         }
 
-        private void OnTest()
+        /* private void OnTest()
         {
             ConfigUtil.DeleteAll();
-        }
+        } */
     }
 }

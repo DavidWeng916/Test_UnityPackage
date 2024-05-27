@@ -2,13 +2,18 @@
     <Style src="project://database/Assets/LocalizationTool/Editor/Resources/UI%20Toolkit/StyleSheet/LocalizationWindow.uss?fileID=7433441132597879392&amp;guid=3e1df3e75c2b74db796048ed0225cdd2&amp;type=3#LocalizationWindow" />
     <ui:VisualElement name="ConfigContainer" class="ConfigContainer">
         <ui:TextField picking-mode="Ignore" label="CSV Path" value="filler text" text="filler text" name="CsvPath" />
-        <uie:ObjectField label="Localization.txt location" name="LocalizationPath" type="UnityEngine.TextAsset, UnityEngine.CoreModule" />
-        <ui:Toggle label="FormatJson" name="JsonFormatToggle" text="Does json need to be formatted?" />
-        <ui:Toggle label="GenerateReport" name="GenerateReportToggle" text="Do it need to generate an output report?" value="false" />
+        <uie:ObjectField label="Localization file" name="LocalizationPath" type="UnityEngine.TextAsset, UnityEngine.CoreModule" />
+        <ui:Toggle label="OnlyUnityTag" name="OnlyUnityTagToggle" />
+        <ui:Toggle label="FormatJson" name="JsonFormatToggle" />
+        <ui:Toggle label="GenerateReport" name="GenerateReportToggle" value="false" />
+        <ui:VisualElement name="PrefixContainer" style="flex-direction: column;">
+            <ui:Toggle label="Remove the prefix" name="PrefixToggle" />
+            <ui:TextField picking-mode="Ignore" label="Prefix" value="filler text" name="PrefixInput" style="visibility: visible; display: flex;" />
+        </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="Line" />
     <ui:VisualElement name="ButtonContainer" class="ButtonContainer">
         <ui:Button text="Execute" display-tooltip-when-elided="true" name="ExecuteButton" class="MenuButton" />
-        <ui:Button text="Test" display-tooltip-when-elided="true" name="TestButton" class="MenuButton" />
+        <ui:Button text="Test" display-tooltip-when-elided="true" name="TestButton" class="MenuButton" style="display: none;" />
     </ui:VisualElement>
 </ui:UXML>
