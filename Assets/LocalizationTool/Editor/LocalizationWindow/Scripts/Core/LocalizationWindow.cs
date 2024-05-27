@@ -81,8 +81,8 @@ namespace Live17.LocalizationEditor
             parseButton.clicked += OnProcess;
 
             // Button - Execute
-            /* Button testButton = rootElement.Query<Button>("TestButton");
-            testButton.clicked += OnTest; */
+            Button testButton = rootElement.Query<Button>("TestButton");
+            testButton.clicked += OnTest;
         }
 
         private void OnProcess()
@@ -90,9 +90,9 @@ namespace Live17.LocalizationEditor
             LocalizationProcess.Execute(_configData, this);
         }
 
-        /* private void OnTest()
+        private void OnTest()
         {
             ConfigUtil.DeleteAll();
-        } */
+        }
     }
 }
